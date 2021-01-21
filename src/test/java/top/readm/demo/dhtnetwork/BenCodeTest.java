@@ -67,9 +67,9 @@ public class BenCodeTest {
 
     @Test
     public void BMapTest() throws Exception{
-        Map<BBytes, BencodeType> map = new HashMap<>();
-        map.put(new BBytes("name".getBytes()),new BBytes("cyz".getBytes()));
-        map.put(new BBytes("age".getBytes()),new BInt(66));
+        Map<String, BencodeType> map = new HashMap<>();
+        map.put("name",new BBytes("cyz".getBytes()));
+        map.put("age",new BInt(66));
         BMap bMap = new BMap( map);
         System.out.println(bMap.getData());
         String s = "d4:name11:create chen3:agei23ee";
@@ -96,20 +96,20 @@ public class BenCodeTest {
         System.out.println(t);
     }
 
-    @Test
-    public void testTorrent() throws Exception{
-        //String torrent = "d8:announce34:http://tracker.ydy.com:86/announce10:createdby13:BitComet/0.5813:creationdatei1117953113e8:encoding3:GBK4:infod6:lengthi474499162e4:name51:05.262005.StarWars Episode IV A New Hope-Rv9.rmvb10:name.utf-851:05.26.2005.Star WasEpisode IV A New Hope-Rv9.rmvb12:piecelengthi262144e6:pieces36220:XXXXXXXXXXXXXXX";
-        String torrent = "d8:announce34:http://tracker.ydy.com:86/announce9:createdby13:BitComet/0.5812:creationdatei1117953113e8:encoding3:GBK4:infod6:lengthi474499162e4:name49:05.262005.StarWars Episode IV A New Hope-Rv9.rmvb10:name.utf-849:05.26.2005.Star WasEpisode IV A New Hope-Rv9.rmvb11:piecelengthi262144eee";
-        BencodeType t = new BencodeReader().read(new ByteArrayInputStream(torrent.getBytes()));
-        System.out.println(t);
-    }
-
 
     @Test
-    public void testTorrent2() throws Exception{
+    public void testSample() throws Exception{
         InputStream ins = Thread.currentThread().getContextClassLoader()
                 .getResourceAsStream("sample.torrent");
             BencodeType t = new BencodeReader().read(ins);
+        System.out.println(t);
+    }
+
+    @Test
+    public void testSample2() throws Exception{
+        InputStream ins = Thread.currentThread().getContextClassLoader()
+                .getResourceAsStream("sample2.torrent");
+        BencodeType t = new BencodeReader().read(ins);
         System.out.println(t);
     }
 

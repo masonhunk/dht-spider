@@ -4,31 +4,31 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BMap implements BencodeType<Map<BBytes, BencodeType>> {
+public class BMap implements BencodeType<Map<String, BencodeType>> {
 
     private static BencodeReader bencodeReader = new BencodeReader();
-    private Map<BBytes, BencodeType> bencodeTypeMap;
+    private Map<String, BencodeType> bencodeTypeMap;
 
     public BMap(){
         this.bencodeTypeMap = new HashMap<>();
     }
 
-    public BMap(Map<BBytes, BencodeType> bencodeTypeMap){
+    public BMap(Map<String, BencodeType> bencodeTypeMap){
         this.bencodeTypeMap = bencodeTypeMap;
     }
 
     @Override
-    public Map<BBytes, BencodeType> getData() {
+    public Map<String, BencodeType> getData() {
         return this.bencodeTypeMap;
     }
 
     @Override
     public void encode(OutputStream out) throws IOException {
         out.write('d');
-        for(Map.Entry<BBytes, BencodeType> entry:bencodeTypeMap.entrySet()){
-            BBytes key = entry.getKey();
+        for(Map.Entry<String, BencodeType> entry:bencodeTypeMap.entrySet()){
+            String key = entry.getKey();
             BencodeType value = entry.getValue();
-            key.encode(out);
+            new BBytes(key.getBytes()).encode(out);
             value.encode(out);
         }
         out.write('e');
@@ -41,11 +41,14 @@ public class BMap implements BencodeType<Map<BBytes, BencodeType>> {
         while (notEnd(in)){
             BencodeType key = bencodeReader.read(in);
             BencodeType value = bencodeReader.read(in);
-            this.bencodeTypeMap.put((BBytes)key, value);
+            this.bencodeTypeMap.put(key.toString(), value);
         }
         in.read();//Skip 'e'
     }
 
+    public BencodeType get(String key){
+        return this.getData().get(key);
+    }
 
     private boolean notEnd(InputStream in) throws IOException{
         in.mark(0);
