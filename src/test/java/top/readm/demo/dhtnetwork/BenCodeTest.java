@@ -40,7 +40,7 @@ public class BenCodeTest {
     public void BListTest() throws Exception{
         String s = "l4:spam4:eggsi9ee";
         BList bList = new BList();
-        bList.decode(new PushbackReader(new StringReader(s)));
+        bList.decode(new StringReader(s));
 
         System.out.println(bList.getData());
     }
@@ -54,7 +54,7 @@ public class BenCodeTest {
         System.out.println(bMap.getData());
         String s = "d4:name11:create chen3:agei23ee";
         bMap = new BMap();
-        bMap.decode(new PushbackReader(new StringReader(s)));
+        bMap.decode(new StringReader(s));
         System.out.println(bMap.getData());
     }
 
@@ -64,7 +64,7 @@ public class BenCodeTest {
         Object obj = BencodeUtils.decode(content, null);
         System.out.println(obj);
 
-        content = "i3e8:announce";
+        content = "i3e";
         obj = BencodeUtils.decode(content, null);
         System.out.println(obj);
     }
@@ -78,9 +78,18 @@ public class BenCodeTest {
 
     @Test
     public void testBencodeReader() throws Exception{
-        BencodeType t = new BencodeReader().read(new PushbackReader(new StringReader("d4:name11:create chen3:agei23ee")));
+        BencodeType t = new BencodeReader().read(new StringReader("d4:name11:create chen3:agei23ee"));
         System.out.println(t);
     }
+
+    @Test
+    public void testTorrent() throws Exception{
+        //String torrent = "d8:announce34:http://tracker.ydy.com:86/announce10:createdby13:BitComet/0.5813:creationdatei1117953113e8:encoding3:GBK4:infod6:lengthi474499162e4:name51:05.262005.StarWars Episode IV A New Hope-Rv9.rmvb10:name.utf-851:05.26.2005.Star WasEpisode IV A New Hope-Rv9.rmvb12:piecelengthi262144e6:pieces36220:XXXXXXXXXXXXXXX";
+        String torrent = "d8:announce34:http://tracker.ydy.com:86/announce9:createdby13:BitComet/0.5812:creationdatei1117953113e8:encoding3:GBK4:infod6:lengthi474499162e4:name49:05.262005.StarWars Episode IV A New Hope-Rv9.rmvb10:name.utf-849:05.26.2005.Star WasEpisode IV A New Hope-Rv9.rmvb11:piecelengthi262144eee";
+        BencodeType t = new BencodeReader().read(new StringReader(torrent));
+        System.out.println(t);
+    }
+
 
     private String read() throws Exception{
         FileInputStream ins = new FileInputStream("C:\\Users\\unnamed\\Desktop\\sample.torrent");

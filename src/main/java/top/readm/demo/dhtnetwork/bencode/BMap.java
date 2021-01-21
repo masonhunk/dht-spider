@@ -36,20 +36,21 @@ public class BMap implements BencodeType<Map<String, BencodeType>> {
 
     @Override
     public void decode(Reader r) throws IOException {
-        PushbackReader rReader = (PushbackReader)r;
         int c = r.read();
         if(c != 'd') throw new IOException("Expect a: d");
-        while (notEnd(rReader)){
-            BencodeType key = bencodeReader.read(rReader);
-            BencodeType value = bencodeReader.read(rReader);
+        while (notEnd(r)){
+            BencodeType key = bencodeReader.read(r);
+            BencodeType value = bencodeReader.read(r);
             this.bencodeTypeMap.put((String)key.getData(), value);
         }
     }
 
-    private boolean notEnd(PushbackReader pReader) throws IOException{
-        int c = pReader.read();
+
+    private boolean notEnd(Reader reader) throws IOException{
+        reader.mark(0);
+        int c = reader.read();
         if(c == -1) throw new EOFException("Unexpected EOF");
-        pReader.unread(c);
+        reader.reset();
         return (char)c != 'e';
     }
 

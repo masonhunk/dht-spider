@@ -15,10 +15,11 @@ public class BencodeReader {
      * Can read from a file reader, buffered reader, even socket..
      * @return
      */
-    public BencodeType read(PushbackReader reader) throws IOException {
+    public BencodeType read(Reader reader) throws IOException {
         /**
          * 1. Read one char, determine the type
          */
+        reader.mark(0);
         int c = reader.read();
         if (c == -1) return null;
 
@@ -27,7 +28,7 @@ public class BencodeReader {
         /**
          * 2. Push back the char to stream.
          */
-        reader.unread(ch);
+        reader.reset();
         /**
          * 3. For each type, call different handlers
          */
