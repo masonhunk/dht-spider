@@ -20,7 +20,7 @@ public class ThreadShareUtils {
     public static final ArrayDeque<DhtNode> unSenseQueue=new ArrayDeque<>();
     public static final ReentrantReadWriteLock unSenseQueueLock=new  ReentrantReadWriteLock();
 
-    //存活节点
+    //存活节点。如果一个节点本来是存活的，后面宕机了，怎么确保把它从存活节点里移除？
     public static final HashMap<String,DhtNode> survivalMap=new HashMap<>();
     public static final ReentrantReadWriteLock survivalMapLock=new  ReentrantReadWriteLock();
 

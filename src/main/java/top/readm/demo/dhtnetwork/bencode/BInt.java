@@ -25,31 +25,26 @@ public class BInt implements BencodeType<BigInteger> {
         return intVal;
     }
 
-    public void encode(Writer w) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        sb.append("i");
-        sb.append(intVal.toString(10));
-        sb.append("e");
-
-        w.write(sb.toString());
-        w.flush();
+    public void encode(OutputStream out) throws IOException {
+        out.write('i');
+        out.write(this.intVal.toString(10).getBytes());
+        out.write('e');
+        out.flush();
     }
 
     @Override
-    public void decode(Reader r) throws IOException {
-        int c = r.read();
+    public void decode(InputStream in) throws IOException {
+        int c = in.read();
         if(c != 'i')  throw new IOException("Must be :i instead of "+ c);
-        BigInteger curr = BigInteger.valueOf(0);
         while(true){
-            c = r.read();
+            c = in.read();
             if(c == -1) throw new EOFException("Impossible EOF, this file is not right");
             char ch = (char)c;
             if(ch == 'e'){
-                this.intVal = curr;
                 break;
             }
-            curr = curr.multiply(BigInteger.valueOf(10));
-            curr = curr.add(BigInteger.valueOf(ch - '0'));
+            intVal = intVal.multiply(BigInteger.valueOf(10));
+            intVal = intVal.add(BigInteger.valueOf(ch - '0'));
         }
     }
 

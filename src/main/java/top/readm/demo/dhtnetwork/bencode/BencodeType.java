@@ -11,8 +11,8 @@ public interface BencodeType<T> {
 
     T getData();
 
-    void encode(Writer w) throws IOException;
+    void encode(OutputStream out) throws IOException;
 
-    void decode(Reader r) throws IOException;
+    void decode(InputStream in) throws IOException;
 
 }

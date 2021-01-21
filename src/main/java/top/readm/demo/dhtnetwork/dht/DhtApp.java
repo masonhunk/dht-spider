@@ -48,6 +48,7 @@ public class DhtApp {
             //初始化 启动节点加入到 线程共享的 未探测的队列  和 已经存活的map队列
             bootstrapNode.forEach((node)->{
                 ThreadShareUtils.unSenseQueue.add(node);
+                //你怎么确保节点上来就是已存活的，如果它们都挂了呢？如果挂了的话，有探测节点会控制这些节点
                 ThreadShareUtils.survivalMap.put(node.getNodeId(), node);
             });
 

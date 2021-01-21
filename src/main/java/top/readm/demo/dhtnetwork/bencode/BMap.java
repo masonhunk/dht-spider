@@ -4,54 +4,55 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BMap implements BencodeType<Map<String, BencodeType>> {
+public class BMap implements BencodeType<Map<BBytes, BencodeType>> {
 
     private static BencodeReader bencodeReader = new BencodeReader();
-    private Map<String, BencodeType> bencodeTypeMap;
+    private Map<BBytes, BencodeType> bencodeTypeMap;
 
     public BMap(){
         this.bencodeTypeMap = new HashMap<>();
     }
 
-    public BMap(Map<String, BencodeType> bencodeTypeMap){
+    public BMap(Map<BBytes, BencodeType> bencodeTypeMap){
         this.bencodeTypeMap = bencodeTypeMap;
     }
 
     @Override
-    public Map<String, BencodeType> getData() {
+    public Map<BBytes, BencodeType> getData() {
         return this.bencodeTypeMap;
     }
 
     @Override
-    public void encode(Writer w) throws IOException {
-        w.write('d');
-        for(Map.Entry<String, BencodeType> entry:bencodeTypeMap.entrySet()){
-            String key = entry.getKey();
+    public void encode(OutputStream out) throws IOException {
+        out.write('d');
+        for(Map.Entry<BBytes, BencodeType> entry:bencodeTypeMap.entrySet()){
+            BBytes key = entry.getKey();
             BencodeType value = entry.getValue();
-            new BString(key).encode(w);
-            value.encode(w);
+            key.encode(out);
+            value.encode(out);
         }
-        w.write('e');
+        out.write('e');
     }
 
     @Override
-    public void decode(Reader r) throws IOException {
-        int c = r.read();
+    public void decode(InputStream in) throws IOException {
+        int c = in.read();
         if(c != 'd') throw new IOException("Expect a: d");
-        while (notEnd(r)){
-            BencodeType key = bencodeReader.read(r);
-            BencodeType value = bencodeReader.read(r);
-            this.bencodeTypeMap.put((String)key.getData(), value);
+        while (notEnd(in)){
+            BencodeType key = bencodeReader.read(in);
+            BencodeType value = bencodeReader.read(in);
+            this.bencodeTypeMap.put((BBytes)key, value);
         }
     }
 
 
-    private boolean notEnd(Reader reader) throws IOException{
-        reader.mark(0);
-        int c = reader.read();
+    private boolean notEnd(InputStream in) throws IOException{
+        in.mark(0);
+        int c = in.read();
         if(c == -1) throw new EOFException("Unexpected EOF");
-        reader.reset();
-        return (char)c != 'e';
+        in.reset();
+        char ch = (char)c;
+        return ch != 'e';
     }
 
     @Override

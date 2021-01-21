@@ -23,32 +23,33 @@ public class BList implements BencodeType<List<BencodeType>> {
     }
 
     @Override
-    public void encode(Writer w) throws IOException {
-        w.write("l");
+    public void encode(OutputStream out) throws IOException {
+        out.write('l');
         for(BencodeType bItem: list){
-            bItem.encode(w);
+            bItem.encode(out);
         }
-        w.write("e");
+        out.write('e');
+        out.flush();
     }
 
     @Override
-    public void decode(Reader r) throws IOException {
-        int c = r.read();
+    public void decode(InputStream in) throws IOException {
+        int c = in.read();
         if(c != 'l') throw new IOException("Expect a : l");
         List<BencodeType> vector = new ArrayList<>();
-        while (notEnd(r)){
-            BencodeType bItem = bencodeReader.read(r);
+        while (notEnd(in)){
+            BencodeType bItem = bencodeReader.read(in);
             vector.add(bItem);
         }
 
         this.list = vector;
     }
 
-    private boolean notEnd(Reader reader) throws IOException{
-        reader.mark(0);
-        int c = reader.read();
+    private boolean notEnd(InputStream in) throws IOException{
+        in.mark(0);
+        int c = in.read();
         if(c == -1) throw new EOFException("Unexpected EOF");
-        reader.reset();
+        in.reset();
         return (char)c != 'e';
     }
 

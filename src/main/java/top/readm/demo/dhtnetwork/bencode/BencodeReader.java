@@ -1,8 +1,7 @@
 package top.readm.demo.dhtnetwork.bencode;
 
-import java.io.EOFException;
 import java.io.IOException;
-import java.io.PushbackReader;
+import java.io.InputStream;
 import java.io.Reader;
 
 /**
@@ -15,12 +14,12 @@ public class BencodeReader {
      * Can read from a file reader, buffered reader, even socket..
      * @return
      */
-    public BencodeType read(Reader reader) throws IOException {
+    public BencodeType read(InputStream in) throws IOException {
         /**
          * 1. Read one char, determine the type
          */
-        reader.mark(0);
-        int c = reader.read();
+        in.mark(0);
+        int c = in.read();
         if (c == -1) return null;
 
         char ch = (char) c;
@@ -28,21 +27,21 @@ public class BencodeReader {
         /**
          * 2. Push back the char to stream.
          */
-        reader.reset();
+        in.reset();
         /**
          * 3. For each type, call different handlers
          */
-        return buildBencodeByType(reader, ch);
+        return buildBencodeByType(in, ch);
     }
 
-    private BencodeType buildBencodeByType(Reader reader, char ch) throws IOException{
+    private BencodeType buildBencodeByType(InputStream in, char ch) throws IOException{
         switch (ch) {
             case 'i':
-                return readBInt(reader);
+                return readBInt(in);
             case 'l':
-                return readBList(reader);
+                return readBList(in);
             case 'd':
-                return readBMap(reader);
+                return readBMap(in);
             case '0':
             case '1':
             case '2':
@@ -53,33 +52,33 @@ public class BencodeReader {
             case '7':
             case '8':
             case '9':
-                return readBString(reader);
+                return readBString(in);
             default:
                 throw new IOException("Invalid data " + ch);
         }
     }
 
-    private BInt readBInt(Reader reader) throws IOException{
+    private BInt readBInt(InputStream in) throws IOException{
         BInt bInt = new BInt();
-        bInt.decode(reader);
+        bInt.decode(in);
         return bInt;
     }
 
-    private BString readBString(Reader reader) throws IOException{
-        BString bString = new BString();
-        bString.decode(reader);
+    private BBytes readBString(InputStream in) throws IOException{
+        BBytes bString = new BBytes();
+        bString.decode(in);
         return bString;
     }
 
-    private BList readBList(Reader reader) throws IOException{
+    private BList readBList(InputStream in) throws IOException{
         BList bList = new BList();
-        bList.decode(reader);
+        bList.decode(in);
         return bList;
     }
 
-    private BMap readBMap(Reader reader) throws IOException{
+    private BMap readBMap(InputStream in) throws IOException{
         BMap bMap = new BMap();
-        bMap.decode(reader);
+        bMap.decode(in);
         return bMap;
     }
 

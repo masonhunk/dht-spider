@@ -28,11 +28,11 @@ public class MsgParseThread implements Runnable {
     private DatagramSocket udpSocket=null;
     private byte[] selfId=null;
 
-    //未探测节点队列
+    //未探测节点队列，未确认是否是存活。初始状态下应该都是未探测节点。
     private ArrayDeque<DhtNode> unSenseQueue= ThreadShareUtils.unSenseQueue;
     private ReentrantReadWriteLock unSenseQueueLock=ThreadShareUtils.unSenseQueueLock;
 
-    //存活节点
+    //存活节点，也就是你发起ping消息后，收到了pong消息，即认为存活
     private HashMap<String,DhtNode> survivalMap=ThreadShareUtils.survivalMap;
     private ReentrantReadWriteLock survivalMapLock=ThreadShareUtils.survivalMapLock;
 
