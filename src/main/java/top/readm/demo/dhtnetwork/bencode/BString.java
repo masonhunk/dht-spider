@@ -76,4 +76,9 @@ public class BString implements BencodeType<String>{
         }
         return sb.toString();
     }
+
+    @Override
+    public String toString(){
+        return this.strVal;
+    }
 }

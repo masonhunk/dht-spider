@@ -6,21 +6,15 @@ import java.util.List;
 
 public class BList implements BencodeType<List<BencodeType>> {
 
-    private BencodeReader bencodeReader;
+    private static BencodeReader bencodeReader = new BencodeReader();
     private List<BencodeType> list;
 
-    public BList(List<BencodeType> list, BencodeReader reader){
-        this.list = list;
-        this.bencodeReader = reader;
-    }
-
-    public BList(BencodeReader reader){
-        this(null, reader);
+    public BList(){
         this.list = new ArrayList<>();
     }
 
     public BList(List<BencodeType> list){
-        this(list, null);
+        this.list = list;
     }
 
     @Override
@@ -43,12 +37,23 @@ public class BList implements BencodeType<List<BencodeType>> {
         int c = pReader.read();
         if(c != 'l') throw new IOException("Expect a : l");
         List<BencodeType> vector = new ArrayList<>();
-        while (true){
-            BencodeType bItem = this.bencodeReader.read(pReader);
-            if(bItem == null) break;
+        while (notEnd(pReader)){
+            BencodeType bItem = bencodeReader.read(pReader);
             vector.add(bItem);
         }
 
         this.list = vector;
+    }
+
+    private boolean notEnd(PushbackReader pReader) throws IOException{
+        int c = pReader.read();
+        if(c == -1) throw new EOFException("Unexpected EOF");
+        pReader.unread(c);
+        return (char)c != 'e';
+    }
+
+    @Override
+    public String toString(){
+        return this.list.toString();
     }
 }

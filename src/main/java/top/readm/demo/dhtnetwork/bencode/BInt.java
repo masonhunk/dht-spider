@@ -8,6 +8,18 @@ public class BInt implements BencodeType<BigInteger> {
 
     private BigInteger intVal;
 
+    public BInt(){
+        intVal = BigInteger.ZERO;
+    }
+
+    public BInt(BigInteger val){
+        this.intVal = val;
+    }
+
+    public BInt(int val){
+        this.intVal = BigInteger.valueOf(val);
+    }
+
     @Override
     public BigInteger getData() {
         return intVal;
@@ -41,5 +53,9 @@ public class BInt implements BencodeType<BigInteger> {
         }
     }
 
+    @Override
+    public String toString(){
+        return this.intVal.toString(10);
+    }
 
 }

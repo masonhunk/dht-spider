@@ -3,13 +3,12 @@ package top.readm.demo.dhtnetwork;
 import org.apache.commons.codec.Charsets;
 import org.junit.Assert;
 import org.junit.Test;
-import top.readm.demo.dhtnetwork.bencode.BInt;
-import top.readm.demo.dhtnetwork.bencode.BList;
-import top.readm.demo.dhtnetwork.bencode.BString;
-import top.readm.demo.dhtnetwork.bencode.BencodeReader;
+import top.readm.demo.dhtnetwork.bencode.*;
 import top.readm.demo.dhtnetwork.dht.Utils.BencodeUtils;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BenCodeTest {
 
@@ -40,11 +39,23 @@ public class BenCodeTest {
     @Test
     public void BListTest() throws Exception{
         String s = "l4:spam4:eggsi9ee";
-        BencodeReader br = new BencodeReader();
-        BList bList = new BList(br);
+        BList bList = new BList();
         bList.decode(new PushbackReader(new StringReader(s)));
 
         System.out.println(bList.getData());
+    }
+
+    @Test
+    public void BMapTest() throws Exception{
+        Map<String, BencodeType> map = new HashMap<>();
+        map.put("name",new BString("cyz"));
+        map.put("age",new BInt(66));
+        BMap bMap = new BMap( map);
+        System.out.println(bMap.getData());
+        String s = "d4:name11:create chen3:agei23ee";
+        bMap = new BMap();
+        bMap.decode(new PushbackReader(new StringReader(s)));
+        System.out.println(bMap.getData());
     }
 
     @Test
@@ -63,6 +74,12 @@ public class BenCodeTest {
         String bt = read();
         Object obj = BencodeUtils.decode(bt, null);
         System.out.println(obj);
+    }
+
+    @Test
+    public void testBencodeReader() throws Exception{
+        BencodeType t = new BencodeReader().read(new PushbackReader(new StringReader("d4:name11:create chen3:agei23ee")));
+        System.out.println(t);
     }
 
     private String read() throws Exception{

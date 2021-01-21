@@ -53,7 +53,6 @@ public class BencodeReader {
             case '8':
             case '9':
                 return readBString(reader);
-            case 'e':return null;//Just for list reading
             default:
                 throw new IOException("Invalid data " + ch);
         }
@@ -72,13 +71,15 @@ public class BencodeReader {
     }
 
     private BList readBList(Reader reader) throws IOException{
-        BList bList = new BList(this);
+        BList bList = new BList();
         bList.decode(reader);
         return bList;
     }
 
     private BMap readBMap(Reader reader) throws IOException{
-        return null;
+        BMap bMap = new BMap();
+        bMap.decode(reader);
+        return bMap;
     }
 
 
