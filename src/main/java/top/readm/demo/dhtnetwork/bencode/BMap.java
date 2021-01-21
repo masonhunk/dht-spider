@@ -43,6 +43,7 @@ public class BMap implements BencodeType<Map<BBytes, BencodeType>> {
             BencodeType value = bencodeReader.read(in);
             this.bencodeTypeMap.put((BBytes)key, value);
         }
+        in.read();//Skip 'e'
     }
 
 

@@ -114,8 +114,18 @@ public class BenCodeTest {
     }
 
     @Test
-    public void te() throws Exception{
-        InputStream in = new ByteArrayInputStream("d8:announce39:http://torrent.ubuntu.com:6969/announce13:announce-listll39:http://torrent.ubuntu.com:6969/announceel44:http://ipv6.torrent.ubuntu.com:6969/announceee7:comment29:Ubuntu CD releases.ubuntu.com13:creation datei1429786237e4:infod6:lengthi1150844928e4:name30:ubuntu-15.04-desktop-amd64.iso12:piece lengthi524288e6:pieces43920".getBytes());
+    public void testNest() throws Exception{
+     //   InputStream in = new ByteArrayInputStream("d8:announce39:http://torrent.ubuntu.com:6969/announce13:announce-listll39:http://torrent.ubuntu.com:6969/announceel44:http://ipv6.torrent.ubuntu.com:6969/announceee7:comment29:Ubuntu CD releases.ubuntu.com13:creation datei1429786237e4:infod6:lengthi1150844928e4:name30:ubuntu-15.04-desktop-amd64.iso12:piece lengthi524288e6:pieces43920".getBytes());
+        InputStream in = new ByteArrayInputStream("d4:key1li1ee4:key2i2ee".getBytes());
+
+        BencodeType t = new BencodeReader().read(in);
+        System.out.println(t);
+    }
+
+    @Test
+    public void testNest2() throws Exception{
+        InputStream in = new ByteArrayInputStream("d8:announce39:http://torrent.ubuntu.com:6969/announce13:announce-listll39:http://torrent.ubuntu.com:6969/announceel44:http://ipv6.torrent.ubuntu.com:6969/announceee7:comment29:Ubuntu CD releases.ubuntu.com13:creation datei1429786237e4:infod6:lengthi1150844928e4:name30:ubuntu-15.04-desktop-amd64.iso12:piece lengthi524288eee".getBytes());
+
         BencodeType t = new BencodeReader().read(in);
         System.out.println(t);
     }

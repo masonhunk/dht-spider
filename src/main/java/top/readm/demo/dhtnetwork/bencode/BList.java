@@ -41,7 +41,7 @@ public class BList implements BencodeType<List<BencodeType>> {
             BencodeType bItem = bencodeReader.read(in);
             vector.add(bItem);
         }
-
+        in.read();//Skip 'e'
         this.list = vector;
     }
 
