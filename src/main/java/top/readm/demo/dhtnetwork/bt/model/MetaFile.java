@@ -4,6 +4,9 @@ import lombok.Builder;
 import lombok.Data;
 import top.readm.demo.dhtnetwork.bencode.BMap;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.security.MessageDigest;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -34,5 +37,32 @@ public class MetaFile {
     private String createdBy;
 
     private String encoding;
+
+    public byte[] getInfoSha1(){
+        /**
+         * 1. Read info bytes
+         */
+        byte[] bytes = null;
+        try(ByteArrayOutputStream baos = new ByteArrayOutputStream();){
+            info.encode(baos);
+            bytes = baos.toByteArray();
+        }catch (IOException ex){
+            ex.printStackTrace();
+            return null;
+        }
+
+        /**
+         * 2. Sha1
+         */
+        try{
+            MessageDigest digest = MessageDigest.getInstance("SHA1");
+            return digest.digest(bytes);
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+            return null;
+        }
+
+    }
 
 }
