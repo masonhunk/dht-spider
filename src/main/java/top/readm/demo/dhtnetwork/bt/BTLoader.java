@@ -53,7 +53,7 @@ public class BTLoader {
         MetaFile metaFile
                 = MetaFile.builder()
                 .announce(bMap.get("announce").toString())
-                .info(convertInfo((BMap) bMap.get("info")))
+                .info(((BMap) bMap.get("info")))
                 .announceList(resolveAnnounceList((BList) bMap.get("announce-list")))
                 .comment(resolveProperty(bMap, "comment"))
                 .createdBy(resolveProperty(bMap, "created by"))

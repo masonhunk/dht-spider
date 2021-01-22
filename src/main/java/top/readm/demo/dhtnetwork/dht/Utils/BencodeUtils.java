@@ -67,6 +67,7 @@ public class BencodeUtils{
         Map<String, Object> sortMap = new TreeMap<String, Object>(
                 (str1,str2)->{
                     return str1.compareTo(str2);
+
                 });
         return  sortMap;
     }

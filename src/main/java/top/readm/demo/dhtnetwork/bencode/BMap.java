@@ -1,8 +1,10 @@
 package top.readm.demo.dhtnetwork.bencode;
 
 import java.io.*;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class BMap implements BencodeType<Map<String, BencodeType>> {
 
@@ -24,8 +26,17 @@ public class BMap implements BencodeType<Map<String, BencodeType>> {
 
     @Override
     public void encode(OutputStream out) throws IOException {
+        /**
+         * 1. Put all mappings into a treemap thus make it ordered，so the info hash can be
+         * determined ignoring orders
+         */
+        TreeMap<String, BencodeType> treeMap = new TreeMap<>(String::compareTo);
+        treeMap.putAll(this.bencodeTypeMap);
+        /**
+         * 2. Output these records
+         */
         out.write('d');
-        for(Map.Entry<String, BencodeType> entry:bencodeTypeMap.entrySet()){
+        for(Map.Entry<String, BencodeType> entry:treeMap.entrySet()){
             String key = entry.getKey();
             BencodeType value = entry.getValue();
             new BBytes(key.getBytes()).encode(out);

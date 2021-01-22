@@ -2,6 +2,7 @@ package top.readm.demo.dhtnetwork.bt.model;
 
 import lombok.Builder;
 import lombok.Data;
+import top.readm.demo.dhtnetwork.bencode.BMap;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,7 +20,7 @@ public class MetaFile {
 
     private String announce;
 
-    private Info info;
+    private BMap info;
 
     /**
      * Optional fields
