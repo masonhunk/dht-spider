@@ -31,6 +31,8 @@ public class TrackerParam {
 
     private long downloaded;
 
+    private int numwant;
+
     private long left;
 
     private String event;

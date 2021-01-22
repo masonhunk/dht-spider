@@ -29,6 +29,7 @@ public class TrackerTest {
                 .port(6881)
                 .peerId(new PeerNode().getPeerId())
                 .event("started")
+                .numwant(10)
                 .build();
 
         HttpTrackerClient client = new HttpTrackerClient();

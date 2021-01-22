@@ -35,6 +35,9 @@ public class HttpTrackerClient implements TrackerClient {
             query+="&peer_id="+ request.getPeerId();
             query+="&port="+ String.valueOf(request.getPort());
             query+="&event="+ request.getEvent();
+            if(request.getNumwant() != 0){
+                query+="&numwant="+ request.getNumwant();
+            }
             /**
              * 2. 访问URL
              */
