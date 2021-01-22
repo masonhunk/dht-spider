@@ -1,7 +1,7 @@
 package top.readm.demo.dhtnetwork.bt;
 
 import lombok.extern.slf4j.Slf4j;
-import top.readm.demo.dhtnetwork.bencode.*;
+import top.readm.demo.dhtnetwork.bt.bencode.*;
 import top.readm.demo.dhtnetwork.bt.model.Info;
 import top.readm.demo.dhtnetwork.bt.model.MInfo;
 import top.readm.demo.dhtnetwork.bt.model.MetaFile;

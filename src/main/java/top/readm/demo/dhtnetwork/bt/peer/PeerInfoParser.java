@@ -1,6 +1,6 @@
 package top.readm.demo.dhtnetwork.bt.peer;
 
-import top.readm.demo.dhtnetwork.bencode.*;
+import top.readm.demo.dhtnetwork.bt.bencode.*;
 
 import java.util.ArrayList;
 import java.util.List;

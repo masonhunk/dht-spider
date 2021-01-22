@@ -1,7 +1,6 @@
-package top.readm.demo.dhtnetwork.bencode;
+package top.readm.demo.dhtnetwork.bt.bencode;
 
 import java.io.*;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;

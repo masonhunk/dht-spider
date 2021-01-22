@@ -1,8 +1,8 @@
 package top.readm.demo.dhtnetwork.bt.tracker;
 
-import top.readm.demo.dhtnetwork.bencode.BBytes;
-import top.readm.demo.dhtnetwork.bencode.BDictionary;
-import top.readm.demo.dhtnetwork.bencode.BencodeType;
+import top.readm.demo.dhtnetwork.bt.bencode.BBytes;
+import top.readm.demo.dhtnetwork.bt.bencode.BDictionary;
+import top.readm.demo.dhtnetwork.bt.bencode.BencodeType;
 import top.readm.demo.dhtnetwork.bt.peer.PeerInfo;
 import top.readm.demo.dhtnetwork.bt.peer.PeerInfoParser;
 

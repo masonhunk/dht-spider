@@ -1,4 +1,4 @@
-package top.readm.demo.dhtnetwork.bencode;
+package top.readm.demo.dhtnetwork.bt.bencode;
 
 import java.io.*;
 import java.util.ArrayList;

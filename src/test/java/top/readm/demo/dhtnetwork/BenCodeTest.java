@@ -3,7 +3,7 @@ package top.readm.demo.dhtnetwork;
 import org.apache.commons.codec.Charsets;
 import org.junit.Assert;
 import org.junit.Test;
-import top.readm.demo.dhtnetwork.bencode.*;
+import top.readm.demo.dhtnetwork.bt.bencode.*;
 import top.readm.demo.dhtnetwork.dht.Utils.BencodeUtils;
 
 import java.io.*;

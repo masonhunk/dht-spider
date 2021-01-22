@@ -1,6 +1,4 @@
-package top.readm.demo.dhtnetwork.bencode;
-
-import org.apache.commons.codec.binary.Hex;
+package top.readm.demo.dhtnetwork.bt.bencode;
 
 import java.io.*;
 

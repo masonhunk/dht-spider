@@ -2,7 +2,7 @@ package top.readm.demo.dhtnetwork.bt.model;
 
 import lombok.Builder;
 import lombok.Data;
-import top.readm.demo.dhtnetwork.bencode.BDictionary;
+import top.readm.demo.dhtnetwork.bt.bencode.BDictionary;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

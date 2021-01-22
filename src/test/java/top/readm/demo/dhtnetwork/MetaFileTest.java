@@ -1,16 +1,11 @@
 package top.readm.demo.dhtnetwork;
 
 import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.codec.cli.Digest;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.Assert;
 import org.junit.Test;
-import top.readm.demo.dhtnetwork.bencode.BencodeReader;
-import top.readm.demo.dhtnetwork.bencode.BencodeType;
 import top.readm.demo.dhtnetwork.bt.BTLoader;
 import top.readm.demo.dhtnetwork.bt.model.MetaFile;
 
-import javax.xml.crypto.dsig.DigestMethod;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.security.MessageDigest;

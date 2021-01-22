@@ -1,7 +1,7 @@
 package top.readm.demo.dhtnetwork.bt.tracker.client;
 
 import com.sun.xml.internal.ws.util.CompletedFuture;
-import top.readm.demo.dhtnetwork.bencode.BDictionary;
+import top.readm.demo.dhtnetwork.bt.bencode.BDictionary;
 import top.readm.demo.dhtnetwork.bt.tracker.TrackerParam;
 import top.readm.demo.dhtnetwork.bt.tracker.TrackerResponse;
 import top.readm.demo.dhtnetwork.bt.tracker.TrackerResponseParser;
