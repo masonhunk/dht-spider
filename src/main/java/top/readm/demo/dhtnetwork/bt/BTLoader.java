@@ -11,7 +11,6 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
-import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -30,7 +29,7 @@ public class BTLoader {
         /**
          * 1. Read root element
          */
-        BMap root = readBMap(in);
+        BDictionary root = readBMap(in);
         /**
          * 2. Build meta file from RootElement
          */
@@ -39,9 +38,9 @@ public class BTLoader {
         return metaFile;
     }
 
-    private BMap readBMap(InputStream in){
+    private BDictionary readBMap(InputStream in){
         try(BufferedInputStream bis = new BufferedInputStream(in);){
-            return (BMap) new BencodeReader().read(bis);
+            return (BDictionary) new BencodeReader().read(bis);
         }
         catch (IOException ex){
             log.error("Error deserializing bt meta file", ex);
@@ -49,29 +48,29 @@ public class BTLoader {
         }
     }
 
-    private MetaFile convertToMetafile(BMap bMap){
+    private MetaFile convertToMetafile(BDictionary bDictionary){
         MetaFile metaFile
                 = MetaFile.builder()
-                .announce(bMap.get("announce").toString())
-                .info(((BMap) bMap.get("info")))
-                .announceList(resolveAnnounceList((BList) bMap.get("announce-list")))
-                .comment(resolveProperty(bMap, "comment"))
-                .createdBy(resolveProperty(bMap, "created by"))
-                .creationDate(resolveDateTime(bMap))
-                .encoding(resolveProperty(bMap, "encoding"))
+                .announce(bDictionary.get("announce").toString())
+                .info(((BDictionary) bDictionary.get("info")))
+                .announceList(resolveAnnounceList((BList) bDictionary.get("announce-list")))
+                .comment(resolveProperty(bDictionary, "comment"))
+                .createdBy(resolveProperty(bDictionary, "created by"))
+                .creationDate(resolveDateTime(bDictionary))
+                .encoding(resolveProperty(bDictionary, "encoding"))
                 .build();
         return metaFile;
     }
 
-    private Info convertInfo(BMap bMap){
-        BencodeType filesField = bMap.get("files");
+    private Info convertInfo(BDictionary bDictionary){
+        BencodeType filesField = bDictionary.get("files");
         //Single file
         if(filesField == null){
             SInfo sInfo = SInfo.builder()
-                    .name(resolveProperty(bMap, "name"))
-                    .length(Long.valueOf(bMap.get("length").toString()))
-                    .pieceLength(Long.valueOf(bMap.get("piece length").toString()))
-                    .pieces(resolvePieces(bMap))
+                    .name(resolveProperty(bDictionary, "name"))
+                    .length(Long.valueOf(bDictionary.get("length").toString()))
+                    .pieceLength(Long.valueOf(bDictionary.get("piece length").toString()))
+                    .pieces(resolvePieces(bDictionary))
                     .build();
             return sInfo;
         }
@@ -81,8 +80,8 @@ public class BTLoader {
         }
     }
 
-    private byte[] resolvePieces(BMap bMap) {
-        BBytes bBytes = (BBytes)bMap.get("pieces");
+    private byte[] resolvePieces(BDictionary bDictionary) {
+        BBytes bBytes = (BBytes) bDictionary.get("pieces");
         return bBytes.getData();
     }
 
@@ -100,12 +99,12 @@ public class BTLoader {
         return result;
     }
 
-    private String resolveProperty(BMap bMap, String key){
-        BencodeType bencodeVal = bMap.get(key);
+    private String resolveProperty(BDictionary bDictionary, String key){
+        BencodeType bencodeVal = bDictionary.get(key);
         return bencodeVal != null?bencodeVal.toString():null;
     }
-    private LocalDateTime resolveDateTime(BMap bMap){
-        BInt bitem = (BInt) bMap.get("creation date");
+    private LocalDateTime resolveDateTime(BDictionary bDictionary){
+        BInt bitem = (BInt) bDictionary.get("creation date");
         if(bitem == null) return null;
         BigInteger timeval = bitem.getData();
         return new Date(timeval.longValue()*1000).toInstant()

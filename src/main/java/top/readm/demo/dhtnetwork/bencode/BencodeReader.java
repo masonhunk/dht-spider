@@ -2,7 +2,6 @@ package top.readm.demo.dhtnetwork.bencode;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Reader;
 
 /**
  * Just like char reader
@@ -76,10 +75,10 @@ public class BencodeReader {
         return bList;
     }
 
-    private BMap readBMap(InputStream in) throws IOException{
-        BMap bMap = new BMap();
-        bMap.decode(in);
-        return bMap;
+    private BDictionary readBMap(InputStream in) throws IOException{
+        BDictionary bDictionary = new BDictionary();
+        bDictionary.decode(in);
+        return bDictionary;
     }
 
 

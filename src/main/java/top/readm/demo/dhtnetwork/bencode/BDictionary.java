@@ -6,16 +6,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class BMap implements BencodeType<Map<String, BencodeType>> {
+public class BDictionary implements BencodeType<Map<String, BencodeType>> {
 
     private static BencodeReader bencodeReader = new BencodeReader();
     private Map<String, BencodeType> bencodeTypeMap;
 
-    public BMap(){
+    public BDictionary(){
         this.bencodeTypeMap = new HashMap<>();
     }
 
-    public BMap(Map<String, BencodeType> bencodeTypeMap){
+    public BDictionary(Map<String, BencodeType> bencodeTypeMap){
         this.bencodeTypeMap = bencodeTypeMap;
     }
 

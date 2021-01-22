@@ -1,7 +1,7 @@
 package top.readm.demo.dhtnetwork.bt.tracker;
 
 import top.readm.demo.dhtnetwork.bencode.BBytes;
-import top.readm.demo.dhtnetwork.bencode.BMap;
+import top.readm.demo.dhtnetwork.bencode.BDictionary;
 import top.readm.demo.dhtnetwork.bencode.BencodeType;
 import top.readm.demo.dhtnetwork.bt.peer.PeerInfo;
 import top.readm.demo.dhtnetwork.bt.peer.PeerInfoParser;
@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class TrackerResponseParser {
 
-    public TrackerResponse parse(BMap rawResponse) {
+    public TrackerResponse parse(BDictionary rawResponse) {
         TrackerResponse response = new TrackerResponse();
         response.setFailureReason(getField(rawResponse, "failure_reason", false));
         if (!response.isSuccess()) {
@@ -30,7 +30,7 @@ public class TrackerResponseParser {
 
     }
 
-    private String getField(BMap rawResponse, String field, boolean required){
+    private String getField(BDictionary rawResponse, String field, boolean required){
         BencodeType val = rawResponse.get(field);
         if(required && val == null){
             throw new RuntimeException("Response missing required field:" + field);
@@ -38,7 +38,7 @@ public class TrackerResponseParser {
         return val != null?val.toString():null;
     }
 
-    private List<PeerInfo> parsePeers(BMap rawResponse){
+    private List<PeerInfo> parsePeers(BDictionary rawResponse){
         BencodeType peersRaw = rawResponse.get("peers");
         if(peersRaw == null) throw new RuntimeException("Response missing peers");
         /**
@@ -52,9 +52,9 @@ public class TrackerResponseParser {
         /**
          * Dictionary mode
          */
-        if(peersRaw instanceof BMap){
-            BMap bMap = BMap.class.cast(peersRaw);
-            return PeerInfoParser.parseDictionary(bMap);
+        if(peersRaw instanceof BDictionary){
+            BDictionary bDictionary = BDictionary.class.cast(peersRaw);
+            return PeerInfoParser.parseDictionary(bDictionary);
         }
 
         throw new RuntimeException("Not supported");

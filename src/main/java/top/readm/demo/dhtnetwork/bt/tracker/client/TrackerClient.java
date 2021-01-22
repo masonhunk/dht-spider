@@ -1,6 +1,5 @@
 package top.readm.demo.dhtnetwork.bt.tracker.client;
 
-import top.readm.demo.dhtnetwork.bencode.BMap;
 import top.readm.demo.dhtnetwork.bt.tracker.TrackerParam;
 import top.readm.demo.dhtnetwork.bt.tracker.TrackerResponse;
 

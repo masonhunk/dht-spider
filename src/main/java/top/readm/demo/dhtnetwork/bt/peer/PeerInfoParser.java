@@ -1,7 +1,6 @@
 package top.readm.demo.dhtnetwork.bt.peer;
 
 import top.readm.demo.dhtnetwork.bencode.*;
-import top.readm.demo.dhtnetwork.util.BinaryUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,11 +48,11 @@ public class PeerInfoParser {
         return peers;
     }
 
-    public static List<PeerInfo> parseDictionary(BMap bMap){
-        BList bList = BList.class.cast(bMap.get("peers"));
+    public static List<PeerInfo> parseDictionary(BDictionary bDictionary){
+        BList bList = BList.class.cast(bDictionary.get("peers"));
         List<PeerInfo> peers = new ArrayList<>();
         for(BencodeType b: bList.getData()) {
-            BMap peerRaw = BMap.class.cast(b);
+            BDictionary peerRaw = BDictionary.class.cast(b);
             PeerInfo peerInfo = new PeerInfo();
             BBytes peerId = (BBytes) peerRaw.get("peer id");
             BBytes ip = (BBytes) peerRaw.get("ip");

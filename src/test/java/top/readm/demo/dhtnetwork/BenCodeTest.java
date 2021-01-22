@@ -70,12 +70,12 @@ public class BenCodeTest {
         Map<String, BencodeType> map = new HashMap<>();
         map.put("name",new BBytes("cyz".getBytes()));
         map.put("age",new BInt(66));
-        BMap bMap = new BMap( map);
-        System.out.println(bMap.getData());
+        BDictionary bDictionary = new BDictionary( map);
+        System.out.println(bDictionary.getData());
         String s = "d4:name11:create chen3:agei23ee";
-        bMap = new BMap();
-        bMap.decode(new ByteArrayInputStream(s.getBytes()));
-        System.out.println(bMap);
+        bDictionary = new BDictionary();
+        bDictionary.decode(new ByteArrayInputStream(s.getBytes()));
+        System.out.println(bDictionary);
     }
 
     @Test

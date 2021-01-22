@@ -1,7 +1,7 @@
 package top.readm.demo.dhtnetwork.bt.tracker.client;
 
 import com.sun.xml.internal.ws.util.CompletedFuture;
-import top.readm.demo.dhtnetwork.bencode.BMap;
+import top.readm.demo.dhtnetwork.bencode.BDictionary;
 import top.readm.demo.dhtnetwork.bt.tracker.TrackerParam;
 import top.readm.demo.dhtnetwork.bt.tracker.TrackerResponse;
 import top.readm.demo.dhtnetwork.bt.tracker.TrackerResponseParser;
@@ -13,8 +13,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
 import java.util.concurrent.Future;
 
 /**
@@ -61,9 +59,9 @@ public class HttpTrackerClient implements TrackerClient {
                 /**
                  * 这块要独立不出去，不要影响正常的IO
                  */
-                BMap bMap = new BMap();
-                bMap.decode(in);
-                return new CompletedFuture<>(responseParser.parse(bMap), null);
+                BDictionary bDictionary = new BDictionary();
+                bDictionary.decode(in);
+                return new CompletedFuture<>(responseParser.parse(bDictionary), null);
             }
             catch (IOException ex){
                 ex.printStackTrace();
@@ -102,9 +100,9 @@ public class HttpTrackerClient implements TrackerClient {
             //System.out.println(url);
             try(InputStream in = con.getInputStream();){
                 String s = IOUtil.readAsString(in);
-                BMap bMap = new BMap();
-                bMap.decode(new ByteArrayInputStream(s.getBytes()));
-                return new CompletedFuture<>(responseParser.parse(bMap), null);
+                BDictionary bDictionary = new BDictionary();
+                bDictionary.decode(new ByteArrayInputStream(s.getBytes()));
+                return new CompletedFuture<>(responseParser.parse(bDictionary), null);
             }
             catch (IOException ex){
                 try(InputStream err = con.getErrorStream()){

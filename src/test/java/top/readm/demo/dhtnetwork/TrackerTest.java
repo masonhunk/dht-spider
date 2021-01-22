@@ -1,7 +1,6 @@
 package top.readm.demo.dhtnetwork;
 
 import org.junit.Test;
-import top.readm.demo.dhtnetwork.bencode.BMap;
 import top.readm.demo.dhtnetwork.bt.BTLoader;
 import top.readm.demo.dhtnetwork.bt.peer.PeerNode;
 import top.readm.demo.dhtnetwork.bt.model.MetaFile;

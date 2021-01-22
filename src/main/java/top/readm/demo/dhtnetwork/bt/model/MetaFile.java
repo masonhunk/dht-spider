@@ -2,7 +2,7 @@ package top.readm.demo.dhtnetwork.bt.model;
 
 import lombok.Builder;
 import lombok.Data;
-import top.readm.demo.dhtnetwork.bencode.BMap;
+import top.readm.demo.dhtnetwork.bencode.BDictionary;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -23,7 +23,7 @@ public class MetaFile {
 
     private String announce;
 
-    private BMap info;
+    private BDictionary info;
 
     /**
      * Optional fields
