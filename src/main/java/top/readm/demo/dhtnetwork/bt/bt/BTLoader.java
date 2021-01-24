@@ -1,11 +1,11 @@
-package top.readm.demo.dhtnetwork.bt;
+package top.readm.demo.dhtnetwork.bt.bt;
 
 import lombok.extern.slf4j.Slf4j;
 import top.readm.demo.dhtnetwork.bt.bencode.*;
-import top.readm.demo.dhtnetwork.bt.model.Info;
-import top.readm.demo.dhtnetwork.bt.model.MInfo;
-import top.readm.demo.dhtnetwork.bt.model.MetaFile;
-import top.readm.demo.dhtnetwork.bt.model.SInfo;
+import top.readm.demo.dhtnetwork.bt.bt.Info;
+import top.readm.demo.dhtnetwork.bt.bt.MInfo;
+import top.readm.demo.dhtnetwork.bt.bt.MetaFile;
+import top.readm.demo.dhtnetwork.bt.bt.SInfo;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -51,38 +51,23 @@ public class BTLoader {
     private MetaFile convertToMetafile(BDictionary bDictionary){
         MetaFile metaFile
                 = MetaFile.builder()
-                .announce(bDictionary.get("announce").toString())
+                .announce(getField(bDictionary,"announce", false))
                 .info(((BDictionary) bDictionary.get("info")))
                 .announceList(resolveAnnounceList((BList) bDictionary.get("announce-list")))
-                .comment(resolveProperty(bDictionary, "comment"))
-                .createdBy(resolveProperty(bDictionary, "created by"))
+                .comment(getField(bDictionary,"comment", false))
+                .createdBy(getField(bDictionary,"created by", false))
                 .creationDate(resolveDateTime(bDictionary))
-                .encoding(resolveProperty(bDictionary, "encoding"))
+                .encoding(getField(bDictionary,"announce", false))
                 .build();
         return metaFile;
     }
 
-    private Info convertInfo(BDictionary bDictionary){
-        BencodeType filesField = bDictionary.get("files");
-        //Single file
-        if(filesField == null){
-            SInfo sInfo = SInfo.builder()
-                    .name(resolveProperty(bDictionary, "name"))
-                    .length(Long.valueOf(bDictionary.get("length").toString()))
-                    .pieceLength(Long.valueOf(bDictionary.get("piece length").toString()))
-                    .pieces(resolvePieces(bDictionary))
-                    .build();
-            return sInfo;
+    private String getField(BDictionary rawResponse, String field, boolean required){
+        BencodeType val = rawResponse.get(field);
+        if(required && val == null){
+            throw new RuntimeException("Response missing required field:" + field);
         }
-        //Multi file
-        else{
-            return new MInfo();
-        }
-    }
-
-    private byte[] resolvePieces(BDictionary bDictionary) {
-        BBytes bBytes = (BBytes) bDictionary.get("pieces");
-        return bBytes.getData();
+        return val != null?val.toString():null;
     }
 
     private List<List<String>> resolveAnnounceList(BList bList){
@@ -99,10 +84,6 @@ public class BTLoader {
         return result;
     }
 
-    private String resolveProperty(BDictionary bDictionary, String key){
-        BencodeType bencodeVal = bDictionary.get(key);
-        return bencodeVal != null?bencodeVal.toString():null;
-    }
     private LocalDateTime resolveDateTime(BDictionary bDictionary){
         BInt bitem = (BInt) bDictionary.get("creation date");
         if(bitem == null) return null;

@@ -1,4 +1,4 @@
-package top.readm.demo.dhtnetwork.bt.model;
+package top.readm.demo.dhtnetwork.bt.bt;
 
 import lombok.Builder;
 import lombok.Data;

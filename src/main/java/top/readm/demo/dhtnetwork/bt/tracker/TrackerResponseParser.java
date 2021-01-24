@@ -17,7 +17,7 @@ public class TrackerResponseParser {
 
     public TrackerResponse parse(BDictionary rawResponse) {
         TrackerResponse response = new TrackerResponse();
-        response.setFailureReason(getField(rawResponse, "failure_reason", false));
+        response.setFailureReason(getField(rawResponse, "failure reason", false));
         if (!response.isSuccess()) {
             throw new RuntimeException(response.getFailureReason());
         }

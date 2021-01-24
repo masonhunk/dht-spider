@@ -23,7 +23,24 @@ public class PeerInfo {
 
     @Override
     public String toString(){
-        return "ip: "+ ip +" ;port: " + port + " ;peerId:"+peerId;
+        return ip+":"+port;
     }
+
+    @Override
+    public int hashCode(){
+        int r = 17;
+        r = r * 31 + ip.hashCode();
+        r = r * 31 + Integer.hashCode(port);
+        return r;
+    }
+
+    @Override
+    public boolean equals(Object other){
+        if(other == null) return false;
+        if(!(other instanceof PeerInfo)) return false;
+        PeerInfo p = PeerInfo.class.cast(other);
+        return p.ip.equals(this.ip) && p.port == port;
+    }
+
 
 }

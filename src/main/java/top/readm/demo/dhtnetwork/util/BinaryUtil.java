@@ -249,5 +249,15 @@ public final class BinaryUtil {
         return ByteBuffer.wrap(input.getBytes(StandardCharsets.UTF_8));
     }
 
+    public static int binaryToBigEndianInt(byte[] bytes){
+        if(bytes.length != 4) throw new IllegalArgumentException("bytes not length 4");
+        int r = 0;
+        for(int i=0;i<bytes.length;i++){
+            r <<= 8;
+            r += bytes[i];
+        }
+        return r;
+    }
+
 }
 

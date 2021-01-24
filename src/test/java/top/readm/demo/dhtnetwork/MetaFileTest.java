@@ -3,8 +3,8 @@ package top.readm.demo.dhtnetwork;
 import org.apache.commons.codec.binary.Hex;
 import org.junit.Assert;
 import org.junit.Test;
-import top.readm.demo.dhtnetwork.bt.BTLoader;
-import top.readm.demo.dhtnetwork.bt.model.MetaFile;
+import top.readm.demo.dhtnetwork.bt.bt.BTLoader;
+import top.readm.demo.dhtnetwork.bt.bt.MetaFile;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -15,7 +15,7 @@ public class MetaFileTest {
     @Test
     public void testSample1() throws Exception{
         InputStream in = Thread.currentThread().getContextClassLoader()
-                .getResourceAsStream("sample.torrent");
+                .getResourceAsStream("sample2.torrent");
         MetaFile metaFile = new BTLoader().load(in);
         Assert.assertEquals(2,metaFile.getAnnounceList().size());
     }

@@ -1,6 +1,5 @@
 package top.readm.demo.dhtnetwork.bt.tracker.client;
 
-import com.sun.xml.internal.ws.util.CompletedFuture;
 import top.readm.demo.dhtnetwork.bt.bencode.BDictionary;
 import top.readm.demo.dhtnetwork.bt.tracker.TrackerParam;
 import top.readm.demo.dhtnetwork.bt.tracker.TrackerResponse;
@@ -13,7 +12,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
+import java.util.function.Supplier;
 
 /**
  * @author aaronchu
@@ -45,8 +46,8 @@ public class HttpTrackerClient implements TrackerClient {
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestProperty("UserAgent","BitLet.org/0.1");
             urlConnection.setRequestMethod("GET");
-            urlConnection.setConnectTimeout(30000);
-            urlConnection.setReadTimeout(30000);
+            urlConnection.setConnectTimeout(5000);
+            urlConnection.setReadTimeout(5000);
             urlConnection.setUseCaches(false);
             urlConnection.setInstanceFollowRedirects(true);
             System.out.println(urlConnection.getURL());
@@ -64,10 +65,9 @@ public class HttpTrackerClient implements TrackerClient {
                  */
                 BDictionary bDictionary = new BDictionary();
                 bDictionary.decode(in);
-                return new CompletedFuture<>(responseParser.parse(bDictionary), null);
+                return CompletableFuture.supplyAsync(() -> responseParser.parse(bDictionary));
             }
             catch (IOException ex){
-                ex.printStackTrace();
                 /**
                  * 4. 异常处理
                  */
@@ -81,11 +81,12 @@ public class HttpTrackerClient implements TrackerClient {
             }
         }
         catch (Exception ex){
-            return new CompletedFuture<>(null, ex);
+            ex.printStackTrace();
+            return CompletableFuture.supplyAsync(() -> null);
         }
     }
 
-    private CompletedFuture<TrackerResponse> handleRedirects(HttpURLConnection con) throws Exception{
+    private Future<TrackerResponse> handleRedirects(HttpURLConnection con) throws Exception{
         String location = con.getHeaderField("Location");
         con.disconnect();
         String url  = location;
@@ -105,7 +106,7 @@ public class HttpTrackerClient implements TrackerClient {
                 String s = IOUtil.readAsString(in);
                 BDictionary bDictionary = new BDictionary();
                 bDictionary.decode(new ByteArrayInputStream(s.getBytes()));
-                return new CompletedFuture<>(responseParser.parse(bDictionary), null);
+                return CompletableFuture.supplyAsync(() -> responseParser.parse(bDictionary));
             }
             catch (IOException ex){
                 try(InputStream err = con.getErrorStream()){
@@ -117,7 +118,8 @@ public class HttpTrackerClient implements TrackerClient {
             }
         }
         catch (Exception ex){
-            return new CompletedFuture<>(null, ex);
+            ex.printStackTrace();
+            return CompletableFuture.supplyAsync(() -> null);
         }
     }
 }

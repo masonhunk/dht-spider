@@ -1,15 +1,18 @@
 package top.readm.demo.dhtnetwork;
 
 import org.junit.Test;
-import top.readm.demo.dhtnetwork.bt.BTLoader;
+import top.readm.demo.dhtnetwork.bt.bt.BTLoader;
 import top.readm.demo.dhtnetwork.bt.peer.PeerNode;
-import top.readm.demo.dhtnetwork.bt.model.MetaFile;
+import top.readm.demo.dhtnetwork.bt.bt.MetaFile;
 import top.readm.demo.dhtnetwork.bt.tracker.TrackerParam;
 import top.readm.demo.dhtnetwork.bt.tracker.TrackerResponse;
 import top.readm.demo.dhtnetwork.bt.tracker.client.HttpTrackerClient;
 import top.readm.demo.dhtnetwork.util.BinaryUtil;
 
 import java.io.InputStream;
+import java.net.URLDecoder;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author aaronchu
@@ -19,9 +22,9 @@ import java.io.InputStream;
 public class TrackerTest {
 
     @Test
-    public void requestSample3() throws Exception{
+    public void requestFindPeers() throws Exception{
         InputStream in = Thread.currentThread().getContextClassLoader()
-                .getResourceAsStream("sample3.torrent");
+                .getResourceAsStream("sample2.torrent");
         MetaFile metaFile = new BTLoader().load(in);
 
         TrackerParam param = TrackerParam
@@ -33,8 +36,21 @@ public class TrackerTest {
                 .build();
 
         HttpTrackerClient client = new HttpTrackerClient();
-        TrackerResponse  response = client.tracker(metaFile.getAnnounce(), param).get();
-        System.out.println(response.getPeers());
+        if(metaFile.getAnnounce() != null && metaFile.getAnnounce().startsWith("http")){
+            TrackerResponse  response = client.tracker(URLDecoder.decode(metaFile.getAnnounce()), param).get();
+            System.out.println(response.getPeers());
+        }
+        else{
+            List<String> annouceList = metaFile.getAnnounceList().stream().flatMap(a->a.stream())
+                    .collect(Collectors.toList());
+            for(String announce: annouceList){
+                if(announce != null && announce.startsWith("http")){
+                    TrackerResponse  response = client.tracker(URLDecoder.decode(announce), param).get();
+                    System.out.println(response.getPeers());
+                    break;
+                }
+            }
+        }
 
 
     }
