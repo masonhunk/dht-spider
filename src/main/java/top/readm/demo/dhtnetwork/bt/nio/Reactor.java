@@ -32,7 +32,6 @@ public class Reactor {
         this.readHandler = new ReadHandler(decoderFactory);
         isRunning = new AtomicBoolean(false);
         this.selectorLock = new ReentrantLock();
-        this.start();
     }
 
     public void register(ServerSocketChannel serverSocketChannel) throws IOException{
@@ -67,6 +66,7 @@ public class Reactor {
         if(!isRunning.compareAndSet(false, true)){
             return;
         }
+        System.out.println("Started");
         while(isRunning.get()){
             int n = selector.select();//It will block register!
             this.selectorLock.lock();

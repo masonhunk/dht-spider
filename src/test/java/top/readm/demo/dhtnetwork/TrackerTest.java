@@ -24,7 +24,7 @@ public class TrackerTest {
     @Test
     public void requestFindPeers() throws Exception{
         InputStream in = Thread.currentThread().getContextClassLoader()
-                .getResourceAsStream("sample2.torrent");
+                .getResourceAsStream("sample3.torrent");
         MetaFile metaFile = new BTLoader().load(in);
 
         TrackerParam param = TrackerParam

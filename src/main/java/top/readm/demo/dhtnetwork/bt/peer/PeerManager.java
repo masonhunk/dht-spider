@@ -20,11 +20,10 @@ public class PeerManager {
     private ConcurrentHashMap<PeerInfo, PeerStatisticData> peerStatisticData;
 
     public PeerManager(Me me) throws IOException{
-        reactor = new Reactor(new MessageDecoderFactory());
+        me.startListening();
+        reactor = me.getReactor();
         peerConnections = new ConcurrentHashMap<>();
         peerStatisticData = new ConcurrentHashMap<>();
-        reactor.register(me.getServerSocketChannel());
-        reactor.start();
     }
 
     /**
