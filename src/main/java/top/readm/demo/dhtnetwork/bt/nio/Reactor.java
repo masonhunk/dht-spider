@@ -6,6 +6,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Condition;
@@ -62,30 +63,47 @@ public class Reactor {
     /**
      * Start reactor.
      */
-    public void start() throws IOException{
+    public void startAsync() throws IOException{
         if(!isRunning.compareAndSet(false, true)){
             return;
         }
-        System.out.println("Started");
-        while(isRunning.get()){
-            int n = selector.select();//It will block register!
-            this.selectorLock.lock();
-            this.selectorLock.unlock();
-            if(n == 0){
-                continue;
-            }
-            Set<SelectionKey> selectionKeys = selector.selectedKeys();
-            for(SelectionKey key: selectionKeys){
-                if(key.isAcceptable()){
-                    this.acceptHandler.handle(key);
-                }
-                if(key.isReadable()){
-                    this.readHandler.handle(key);
-                }
-            }
-            selectionKeys.clear();;
-        }
+        new Thread(() -> doStart()).start();
     }
+
+    private void doStart(){
+        Exception last = null;
+        while(isRunning.get()){
+            try{
+                int n = selector.select();//It will block register!
+                this.selectorLock.lock();
+                this.selectorLock.unlock();
+                if(n == 0){
+                    continue;
+                }
+                Set<SelectionKey> selectionKeys = selector.selectedKeys();
+                Iterator<SelectionKey> it = selectionKeys.iterator();
+                while(it.hasNext()){
+                    SelectionKey key = it.next();
+                    it.remove();
+                    if(key.isAcceptable()){
+                        this.acceptHandler.handle(key);
+                    }
+                    if(key.isReadable()){
+                        this.readHandler.handle(key);
+                    }
+                }
+
+            }
+            catch (Exception ex){
+                ex.printStackTrace();
+                last = ex;
+                break;
+            }
+
+        }
+        System.out.println("Something happended because:"+last);
+    }
+
 
     /**
      * Stop the reactor. It is called by some man

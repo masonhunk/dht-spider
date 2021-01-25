@@ -15,7 +15,8 @@ public interface BTMessage {
         if(type == MessageType.BitField.getType()){
             return new BitfieldMessage();
         }
-        throw new IllegalArgumentException("Not supported");
+        return new NioClient.FakeMessage();
+        //throw new IllegalArgumentException("Not supported");
     }
 
     void write(OutputStream out) throws IOException;

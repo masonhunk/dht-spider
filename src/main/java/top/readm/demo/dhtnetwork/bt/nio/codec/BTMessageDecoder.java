@@ -38,8 +38,8 @@ public class BTMessageDecoder implements MessageDecoder<BTMessage> {
                 return null;
             }
             //Converting to handling body bytes
-            int headerLength = BinaryUtil.binaryToBigEndianInt(headerBytes);
-            bodyBytes = new byte[headerLength];
+            int bodyLen = BinaryUtil.binaryToBigEndianInt(headerBytes);
+            bodyBytes = new byte[bodyLen];
             bodyBytesRead = 0;
             readingHeader = false;
         }

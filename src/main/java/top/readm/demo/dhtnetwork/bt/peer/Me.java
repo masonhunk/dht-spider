@@ -6,8 +6,6 @@ import top.readm.demo.dhtnetwork.bt.nio.MessageDecoderFactory;
 import top.readm.demo.dhtnetwork.bt.nio.Reactor;
 
 import java.io.IOException;
-import java.net.Inet4Address;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.channels.ServerSocketChannel;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -39,7 +37,7 @@ public class Me {
          */
         ssc.configureBlocking(false);
         this.reactor.register(ssc);
-        this.reactor.start();
+        this.reactor.startAsync();
         log.info("Start listening on {}", port);
     }
 
@@ -54,7 +52,6 @@ public class Me {
                 ServerSocketChannel ssc = ServerSocketChannel.open();
                 ssc.bind(new InetSocketAddress("0.0.0.0", port));
 
-                System.out.println("Hi");
                 log.info("Binding to {}", port);
                 return ssc;
             } catch (IOException ex) {
