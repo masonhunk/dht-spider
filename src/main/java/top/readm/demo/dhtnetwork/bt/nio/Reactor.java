@@ -47,6 +47,7 @@ public class Reactor {
         }
     }
 
+    //TODO: add a listener, which can
     public void register(SocketChannel socketChannel) throws IOException{
         selectorLock.lock();
         try{

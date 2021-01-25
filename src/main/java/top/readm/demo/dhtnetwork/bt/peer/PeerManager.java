@@ -15,13 +15,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class PeerManager {
 
-    private Reactor reactor;
+    private Me me;
     private ConcurrentHashMap<PeerInfo, SocketChannel> peerConnections;
     private ConcurrentHashMap<PeerInfo, PeerStatisticData> peerStatisticData;
 
     public PeerManager(Me me) throws IOException{
         me.startListening();
-        reactor = me.getReactor();
+        this.me = me;
         peerConnections = new ConcurrentHashMap<>();
         peerStatisticData = new ConcurrentHashMap<>();
     }
@@ -31,21 +31,17 @@ public class PeerManager {
      * This method is called on two situations: 1). It is acquired from tracker response 2). It is from connection
      * @param p
      */
-    public void startPeer(PeerInfo p, SocketChannel channel) throws IOException {
+    public void addPeer(PeerInfo p, SocketChannel channel) throws IOException {
         if(peerConnections.contains(p)) return;
-        /*
-        if(conn == null) {
-            conn = SocketChannel.open(new InetSocketAddress(p.getIp(), p.getPort()));
-            conn.configureBlocking(false);
-            reactor.register(conn);
-        }
-        else{
-
+        if(channel == null) {
+            channel = SocketChannel.open(new InetSocketAddress(p.getIp(), p.getPort()));
+            channel.configureBlocking(false);
+            me.getReactor().register(channel);
         }
         peers.add(p);
         peerConnections.put(p, conn);
 
-         */
+         
     }
 
     public void startPeer(PeerInfo peerInfo) throws IOException{

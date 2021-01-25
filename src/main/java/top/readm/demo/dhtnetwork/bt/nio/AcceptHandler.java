@@ -16,6 +16,8 @@ public class AcceptHandler {
         ServerSocketChannel ssc = (ServerSocketChannel)key.channel();;
         SocketChannel channel = ssc.accept();
         reactor.register(channel);
+        //TODO:make a peer and put it into peer manager. and you should keep a set of registered channels
+        //to specify whether the channel is there
     }
 
 
