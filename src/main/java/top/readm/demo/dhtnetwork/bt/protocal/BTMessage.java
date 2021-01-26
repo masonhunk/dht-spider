@@ -12,11 +12,14 @@ public interface BTMessage {
             return new KeepAliveMessage();
         }
         byte type = bodyBytes[0];
+        if(type == MessageType.Handshake.getType()){
+            return  new HandshakeMessage().populateFieldsFromExtBytes(bodyBytes);
+        }
+
         if(type == MessageType.BitField.getType()){
             return new BitfieldMessage();
         }
-        return new NioClient.FakeMessage();
-        //throw new IllegalArgumentException("Not supported");
+        throw new IllegalArgumentException("Not supported");
     }
 
     void write(OutputStream out) throws IOException;

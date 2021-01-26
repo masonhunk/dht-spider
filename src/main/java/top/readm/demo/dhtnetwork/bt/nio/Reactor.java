@@ -27,10 +27,12 @@ public class Reactor {
 
     private ReentrantLock selectorLock;
 
-    public Reactor(MessageDecoderFactory decoderFactory) throws IOException {
+    public Reactor(MessageDecoderFactory decoderFactory,
+                   ConnectionAcceptEventListener conListener,
+                   MessageDecodeListener msgListener) throws IOException {
         this.selector = Selector.open();
-        this.acceptHandler = new AcceptHandler(this);
-        this.readHandler = new ReadHandler(decoderFactory);
+        this.acceptHandler = new AcceptHandler(this, conListener);
+        this.readHandler = new ReadHandler(decoderFactory, msgListener);
         isRunning = new AtomicBoolean(false);
         this.selectorLock = new ReentrantLock();
     }

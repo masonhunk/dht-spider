@@ -20,13 +20,13 @@ public class Me {
     private int port;
     public Me() throws IOException {
         this.started = new AtomicBoolean(false);
-        this.reactor = new Reactor(new MessageDecoderFactory());
     }
 
-    public void startListening() throws IOException{
+    public void startListening(PeerManager peerManager) throws IOException{
         if(!this.started.compareAndSet(false, true)){
             return;
         }
+        this.reactor = new Reactor(new MessageDecoderFactory(), new PeerPassiveConnectionListener(peerManager));
         /**
          * Find a port
          */

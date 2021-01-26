@@ -1,6 +1,7 @@
 package top.readm.demo.dhtnetwork.bt.nio;
 
 import top.readm.demo.dhtnetwork.bt.nio.codec.MessageDecoder;
+import top.readm.demo.dhtnetwork.bt.peer.PeerManager;
 import top.readm.demo.dhtnetwork.bt.protocal.BTMessage;
 
 import java.io.IOException;
@@ -16,14 +17,15 @@ public class ReadHandler {
 
     private ConcurrentHashMap<SocketChannel, MessageDecoder> decoders;
 
+    private MessageDecodeListener listener;
 
+    private ExecutorService executor;
 
-    private BlockingQueue decodedMessage;
-
-    public ReadHandler(MessageDecoderFactory decoderFactory){
+    public ReadHandler(MessageDecoderFactory decoderFactory, MessageDecodeListener listener){
         this.decoders = new ConcurrentHashMap<>();
         this.decoderFactory = decoderFactory;
-        this.decodedMessage = new LinkedBlockingQueue<>();;
+        this.listener = listener;
+        this.executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     }
 
     public void handle(SelectionKey key) throws IOException {
@@ -54,8 +56,8 @@ public class ReadHandler {
              */
             Object msg;
             while ((msg = decoder.decode(buf)) != null) {
-                System.out.println("message decoded:" + msg);
-                decodedMessage.offer(msg);
+                final BTMessage btMessage = (BTMessage)msg;
+                this.executor.submit(()->this.listener.onMessage((BTMessage) btMessage));
             }
             buf.clear();
         } catch (IOException | CancelledKeyException ex) {

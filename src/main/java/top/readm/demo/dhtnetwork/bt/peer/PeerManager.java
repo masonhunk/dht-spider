@@ -38,10 +38,6 @@ public class PeerManager {
             channel.configureBlocking(false);
             me.getReactor().register(channel);
         }
-        peers.add(p);
-        peerConnections.put(p, conn);
-
-         
     }
 
     public void startPeer(PeerInfo peerInfo) throws IOException{

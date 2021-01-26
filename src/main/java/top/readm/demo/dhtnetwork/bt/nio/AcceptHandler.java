@@ -8,16 +8,17 @@ import java.nio.channels.SocketChannel;
 public class AcceptHandler {
 
     private Reactor reactor;
-    public AcceptHandler(Reactor reactor){
+    private ConnectionAcceptEventListener listener;
+    public AcceptHandler(Reactor reactor, ConnectionAcceptEventListener listener){
         this.reactor = reactor;
+        this.listener = listener;
     }
 
     public void handle(SelectionKey key) throws IOException {
         ServerSocketChannel ssc = (ServerSocketChannel)key.channel();;
         SocketChannel channel = ssc.accept();
         reactor.register(channel);
-        //TODO:make a peer and put it into peer manager. and you should keep a set of registered channels
-        //to specify whether the channel is there
+        this.listener.onChannelEstablished(channel);
     }
 
 
