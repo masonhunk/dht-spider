@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import top.readm.demo.dhtnetwork.bt.nio.MessageDecoderFactory;
 import top.readm.demo.dhtnetwork.bt.nio.Reactor;
+import top.readm.demo.dhtnetwork.bt.protocal.MessageReceiveListener;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -26,7 +27,8 @@ public class Me {
         if(!this.started.compareAndSet(false, true)){
             return;
         }
-        this.reactor = new Reactor(new MessageDecoderFactory(), new PeerPassiveConnectionListener(peerManager));
+        this.reactor = new Reactor(new MessageDecoderFactory(), new PeerPassiveConnectionListener(peerManager),
+                new MessageReceiveListener());
         /**
          * Find a port
          */

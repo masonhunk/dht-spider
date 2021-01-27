@@ -1,11 +1,12 @@
-package top.readm.demo.dhtnetwork.bt.protocal;
+package top.readm.demo.dhtnetwork.bt.handshake;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import lombok.Data;
+import lombok.Getter;
+
 import java.util.Arrays;
 
-public class HandshakeMessage implements BTMessage{
+@Data
+public class HandshakeMessage{
 
     public static final int PTR_LEN;
     public static final String PTR;
@@ -34,13 +35,4 @@ public class HandshakeMessage implements BTMessage{
         return this;
     }
 
-    @Override
-    public void write(OutputStream out) throws IOException {
-
-    }
-
-    @Override
-    public void read(InputStream in) throws IOException {
-
-    }
 }

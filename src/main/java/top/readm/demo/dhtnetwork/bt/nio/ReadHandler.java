@@ -1,27 +1,25 @@
 package top.readm.demo.dhtnetwork.bt.nio;
 
 import top.readm.demo.dhtnetwork.bt.nio.codec.MessageDecoder;
-import top.readm.demo.dhtnetwork.bt.peer.PeerManager;
-import top.readm.demo.dhtnetwork.bt.protocal.BTMessage;
+import top.readm.demo.dhtnetwork.bt.protocal.BTProtocalMessage;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.channels.CancelledKeyException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 import java.util.concurrent.*;
-import java.util.function.Function;
 
 public class ReadHandler {
+
     private MessageDecoderFactory decoderFactory;
 
     private ConcurrentHashMap<SocketChannel, MessageDecoder> decoders;
 
-    private MessageDecodeListener listener;
+    private MessageEventListener listener;
 
     private ExecutorService executor;
 
-    public ReadHandler(MessageDecoderFactory decoderFactory, MessageDecodeListener listener){
+    public ReadHandler(MessageDecoderFactory decoderFactory, MessageEventListener listener){
         this.decoders = new ConcurrentHashMap<>();
         this.decoderFactory = decoderFactory;
         this.listener = listener;
@@ -56,11 +54,11 @@ public class ReadHandler {
              */
             Object msg;
             while ((msg = decoder.decode(buf)) != null) {
-                final BTMessage btMessage = (BTMessage)msg;
-                this.executor.submit(()->this.listener.onMessage((BTMessage) btMessage));
+                final BTProtocalMessage btMessage = (BTProtocalMessage)msg;
+                this.executor.submit(()->this.listener.onMessage((BTProtocalMessage) btMessage));
             }
             buf.clear();
-        } catch (IOException | CancelledKeyException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             key.cancel();
             try {

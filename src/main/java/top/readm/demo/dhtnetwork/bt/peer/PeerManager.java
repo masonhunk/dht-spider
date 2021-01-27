@@ -15,13 +15,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class PeerManager {
 
-    private Me me;
     private ConcurrentHashMap<PeerInfo, SocketChannel> peerConnections;
     private ConcurrentHashMap<PeerInfo, PeerStatisticData> peerStatisticData;
 
-    public PeerManager(Me me) throws IOException{
-        me.startListening();
-        this.me = me;
+    public PeerManager() throws IOException{
         peerConnections = new ConcurrentHashMap<>();
         peerStatisticData = new ConcurrentHashMap<>();
     }
@@ -33,14 +30,6 @@ public class PeerManager {
      */
     public void addPeer(PeerInfo p, SocketChannel channel) throws IOException {
         if(peerConnections.contains(p)) return;
-        if(channel == null) {
-            channel = SocketChannel.open(new InetSocketAddress(p.getIp(), p.getPort()));
-            channel.configureBlocking(false);
-            me.getReactor().register(channel);
-        }
-    }
-
-    public void startPeer(PeerInfo peerInfo) throws IOException{
     }
 
     /**

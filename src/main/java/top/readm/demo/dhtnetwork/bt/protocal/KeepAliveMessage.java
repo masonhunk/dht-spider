@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class KeepAliveMessage implements BTMessage{
+public class KeepAliveMessage implements BTProtocalMessage {
 
     @Override
     public void write(OutputStream out) throws IOException {

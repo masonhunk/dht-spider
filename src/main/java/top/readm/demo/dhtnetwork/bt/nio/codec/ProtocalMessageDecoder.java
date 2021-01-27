@@ -1,7 +1,7 @@
 package top.readm.demo.dhtnetwork.bt.nio.codec;
 
-import top.readm.demo.dhtnetwork.bt.protocal.BTMessage;
-import top.readm.demo.dhtnetwork.bt.protocal.HandshakeMessage;
+import top.readm.demo.dhtnetwork.bt.protocal.BTProtocalMessage;
+import top.readm.demo.dhtnetwork.bt.handshake.HandshakeMessage;
 import top.readm.demo.dhtnetwork.util.BinaryUtil;
 
 import java.nio.ByteBuffer;
@@ -14,7 +14,7 @@ import java.util.Arrays;
  *
  * This is not thread safe, please use it in thread safe mode
  */
-public class BTMessageDecoder implements MessageDecoder<BTMessage> {
+public class ProtocalMessageDecoder implements MessageDecoder<BTProtocalMessage> {
 
     /**
      * Header related
@@ -30,7 +30,7 @@ public class BTMessageDecoder implements MessageDecoder<BTMessage> {
 
     private boolean readingHeader = true;
     @Override
-    public BTMessage decode(ByteBuffer bb) {
+    public BTProtocalMessage decode(ByteBuffer bb) {
         /**
          * 1. Read header bytes
          */
@@ -53,9 +53,9 @@ public class BTMessageDecoder implements MessageDecoder<BTMessage> {
         //Handshake
         if(bodyBytes.length == 19 && Arrays.equals(bodyBytes, HandshakeMessage.PTR_BYTES)){
             prepareBodyReading(48);
-            return null;//consume it in next loop.
+            if(!consumeBody(bb)) return null;
         }
-        return BTMessage.of(bodyBytes);
+        return BTProtocalMessage.of(bodyBytes);
     }
 
     /**

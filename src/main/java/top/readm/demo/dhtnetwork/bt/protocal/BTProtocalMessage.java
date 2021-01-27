@@ -4,18 +4,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public interface BTMessage {
+public interface BTProtocalMessage {
 
-    static BTMessage of(byte[] bodyBytes) {//
+    static BTProtocalMessage of(byte[] bodyBytes) {//
         //Keep alive message is really special, it does not have a type
         if(bodyBytes.length == 0){
             return new KeepAliveMessage();
         }
         byte type = bodyBytes[0];
-        if(type == MessageType.Handshake.getType()){
-            return  new HandshakeMessage().populateFieldsFromExtBytes(bodyBytes);
-        }
-
         if(type == MessageType.BitField.getType()){
             return new BitfieldMessage();
         }

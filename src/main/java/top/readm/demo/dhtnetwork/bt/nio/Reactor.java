@@ -9,7 +9,6 @@ import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -29,7 +28,7 @@ public class Reactor {
 
     public Reactor(MessageDecoderFactory decoderFactory,
                    ConnectionAcceptEventListener conListener,
-                   MessageDecodeListener msgListener) throws IOException {
+                   MessageEventListener msgListener) throws IOException {
         this.selector = Selector.open();
         this.acceptHandler = new AcceptHandler(this, conListener);
         this.readHandler = new ReadHandler(decoderFactory, msgListener);
